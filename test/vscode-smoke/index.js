@@ -51,10 +51,23 @@ exports.run = async function () {
     // formatter
     const messy = await vscode.workspace.openTextDocument(P('proto/shop/v1/messy.proto'));
     await vscode.window.showTextDocument(messy);
-    await vscode.commands.executeCommand('editor.action.formatDocument');
+    const edits = await vscode.commands.executeCommand('vscode.executeFormatDocumentProvider', messy.uri, { tabSize: 2, insertSpaces: true });
+    const we = new vscode.WorkspaceEdit();
+    for (const e of edits || []) we.replace(messy.uri, e.range, e.newText);
+    await vscode.workspace.applyEdit(we);
     const want = 'syntax = "proto3";\npackage shop.v1;\nimport "common/money.proto";\n// A gift card.\nmessage GiftCard {\n  string code = 1; // printed on the card\n  shop.common.Money balance = 2;\n  repeated string tags = 3 [deprecated = true];\n  map<string, string> labels = 4;\n}\n';
     const got = await until(() => (messy.getText() === want ? true : null), 5000);
-    check('Format Document', !!got, JSON.stringify(messy.getText()).slice(0, 300));
+    check('formatting provider (Format Document)', !!got, JSON.stringify(messy.getText()).slice(0, 300));
+    await vscode.commands.executeCommand('workbench.action.files.revert');
+    await until(() => messy.getText() !== want, 3000);
+    let viaCommand = null;
+    for (let i = 0; i < 3 && !viaCommand; i++) {
+      await vscode.window.showTextDocument(messy, { preserveFocus: false });
+      await sleep(500);
+      await vscode.commands.executeCommand('editor.action.formatDocument');
+      viaCommand = await until(() => (messy.getText() === want ? true : null), 3000);
+    }
+    check('editor.action.formatDocument command', !!viaCommand, JSON.stringify(messy.getText()).slice(0, 200));
     await vscode.commands.executeCommand('workbench.action.files.revert');
 
     // definition, references, hover, symbols, completion
