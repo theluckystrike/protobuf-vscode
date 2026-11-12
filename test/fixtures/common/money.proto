@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package shop.common;
+
+// An amount of money in one currency.
+message Money {
+  string currency_code = 1; // ISO 4217
+  int64 units = 2;
+  int32 nanos = 3;
+}

@@ -1,0 +1,438 @@
+{
+ "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+ "name": "Protocol Buffers",
+ "scopeName": "source.proto",
+ "patterns": [
+  {
+   "include": "#comments"
+  },
+  {
+   "include": "#syntax"
+  },
+  {
+   "include": "#package"
+  },
+  {
+   "include": "#import"
+  },
+  {
+   "include": "#option"
+  },
+  {
+   "include": "#declaration"
+  },
+  {
+   "include": "#rpc"
+  },
+  {
+   "include": "#mapField"
+  },
+  {
+   "include": "#field"
+  },
+  {
+   "include": "#enumValue"
+  },
+  {
+   "include": "#reservedLike"
+  },
+  {
+   "include": "#optionList"
+  },
+  {
+   "include": "#textFormatKey"
+  },
+  {
+   "include": "#keywords"
+  },
+  {
+   "include": "#constants"
+  },
+  {
+   "include": "#strings"
+  },
+  {
+   "include": "#numbers"
+  },
+  {
+   "include": "#punctuation"
+  }
+ ],
+ "repository": {
+  "comments": {
+   "patterns": [
+    {
+     "begin": "/\\*",
+     "end": "\\*/",
+     "name": "comment.block.proto",
+     "captures": {
+      "0": {
+       "name": "punctuation.definition.comment.proto"
+      }
+     }
+    },
+    {
+     "begin": "//",
+     "end": "$",
+     "name": "comment.line.double-slash.proto",
+     "beginCaptures": {
+      "0": {
+       "name": "punctuation.definition.comment.proto"
+      }
+     }
+    }
+   ]
+  },
+  "syntax": {
+   "match": "\\b(syntax|edition)\\s*(=)\\s*(\"[^\"]*\"|'[^']*')",
+   "captures": {
+    "1": {
+     "name": "keyword.other.syntax.proto"
+    },
+    "2": {
+     "name": "keyword.operator.assignment.proto"
+    },
+    "3": {
+     "name": "string.quoted.double.proto"
+    }
+   }
+  },
+  "package": {
+   "match": "\\b(package)\\s+([A-Za-z_][\\w.]*)",
+   "captures": {
+    "1": {
+     "name": "keyword.other.package.proto"
+    },
+    "2": {
+     "name": "entity.name.namespace.proto"
+    }
+   }
+  },
+  "import": {
+   "match": "\\b(import)\\s+(?:(public|weak|option)\\s+)?(\"[^\"]*\"|'[^']*')",
+   "captures": {
+    "1": {
+     "name": "keyword.control.import.proto"
+    },
+    "2": {
+     "name": "storage.modifier.proto"
+    },
+    "3": {
+     "name": "string.quoted.double.proto"
+    }
+   }
+  },
+  "option": {
+   "match": "\\b(option)\\s+((?:\\([.\\w]+\\)|[A-Za-z_]\\w*)(?:\\.(?:\\([.\\w]+\\)|[A-Za-z_]\\w*))*)",
+   "captures": {
+    "1": {
+     "name": "keyword.other.option.proto"
+    },
+    "2": {
+     "name": "entity.other.attribute-name.proto"
+    }
+   }
+  },
+  "declaration": {
+   "patterns": [
+    {
+     "match": "\\b(message|enum|service)\\s+([A-Za-z_]\\w*)",
+     "captures": {
+      "1": {
+       "name": "storage.type.$1.proto"
+      },
+      "2": {
+       "name": "entity.name.type.proto"
+      }
+     }
+    },
+    {
+     "match": "\\b(extend)\\s+((?:\\.?[A-Za-z_][A-Za-z0-9_]*)(?:\\.[A-Za-z_][A-Za-z0-9_]*)*)",
+     "captures": {
+      "1": {
+       "name": "storage.type.extend.proto"
+      },
+      "2": {
+       "name": "entity.name.type.proto"
+      }
+     }
+    },
+    {
+     "match": "\\b(oneof)\\s+([A-Za-z_]\\w*)",
+     "captures": {
+      "1": {
+       "name": "storage.type.oneof.proto"
+      },
+      "2": {
+       "name": "variable.other.oneof.proto"
+      }
+     }
+    },
+    {
+     "match": "\\b(group)\\s+([A-Z]\\w*)",
+     "captures": {
+      "1": {
+       "name": "storage.type.group.proto"
+      },
+      "2": {
+       "name": "entity.name.type.proto"
+      }
+     }
+    }
+   ]
+  },
+  "rpc": {
+   "patterns": [
+    {
+     "match": "\\b(rpc)\\s+([A-Za-z_]\\w*)",
+     "captures": {
+      "1": {
+       "name": "storage.type.rpc.proto"
+      },
+      "2": {
+       "name": "entity.name.function.proto"
+      }
+     }
+    },
+    {
+     "match": "\\b(returns)\\b",
+     "name": "keyword.other.returns.proto"
+    },
+    {
+     "match": "(\\()\\s*(?:(stream)\\s+)?((?:\\.?[A-Za-z_][A-Za-z0-9_]*)(?:\\.[A-Za-z_][A-Za-z0-9_]*)*)\\s*(\\))",
+     "captures": {
+      "1": {
+       "name": "punctuation.section.parens.begin.proto"
+      },
+      "2": {
+       "name": "storage.modifier.stream.proto"
+      },
+      "3": {
+       "patterns": [
+        {
+         "include": "#scalar"
+        },
+        {
+         "match": "[.A-Za-z0-9_]+",
+         "name": "entity.name.type.proto"
+        }
+       ]
+      },
+      "4": {
+       "name": "punctuation.section.parens.end.proto"
+      }
+     }
+    }
+   ]
+  },
+  "mapField": {
+   "match": "\\b(map)\\s*(<)\\s*([A-Za-z_]\\w*)\\s*(,)\\s*((?:\\.?[A-Za-z_][A-Za-z0-9_]*)(?:\\.[A-Za-z_][A-Za-z0-9_]*)*)\\s*(>)\\s*([A-Za-z_]\\w*)\\s*(=)\\s*(-?(?:0[xX][0-9A-Fa-f]+|[0-9]+))",
+   "captures": {
+    "1": {
+     "name": "storage.type.map.proto"
+    },
+    "2": {
+     "name": "punctuation.definition.typeparameters.begin.proto"
+    },
+    "3": {
+     "patterns": [
+      {
+       "include": "#scalar"
+      },
+      {
+       "match": "[.A-Za-z0-9_]+",
+       "name": "entity.name.type.proto"
+      }
+     ]
+    },
+    "4": {
+     "name": "punctuation.separator.comma.proto"
+    },
+    "5": {
+     "patterns": [
+      {
+       "include": "#scalar"
+      },
+      {
+       "match": "[.A-Za-z0-9_]+",
+       "name": "entity.name.type.proto"
+      }
+     ]
+    },
+    "6": {
+     "name": "punctuation.definition.typeparameters.end.proto"
+    },
+    "7": {
+     "name": "variable.other.member.proto"
+    },
+    "8": {
+     "name": "keyword.operator.assignment.proto"
+    },
+    "9": {
+     "name": "constant.numeric.field-number.proto"
+    }
+   }
+  },
+  "field": {
+   "match": "\\b(?:(optional|required|repeated)\\s+)?((?:\\.?[A-Za-z_][A-Za-z0-9_]*)(?:\\.[A-Za-z_][A-Za-z0-9_]*)*)\\s+([A-Za-z_]\\w*)\\s*(=)\\s*(-?(?:0[xX][0-9A-Fa-f]+|[0-9]+))",
+   "captures": {
+    "1": {
+     "name": "storage.modifier.proto"
+    },
+    "2": {
+     "patterns": [
+      {
+       "include": "#scalar"
+      },
+      {
+       "match": "[.A-Za-z0-9_]+",
+       "name": "entity.name.type.proto"
+      }
+     ]
+    },
+    "3": {
+     "name": "variable.other.member.proto"
+    },
+    "4": {
+     "name": "keyword.operator.assignment.proto"
+    },
+    "5": {
+     "name": "constant.numeric.field-number.proto"
+    }
+   }
+  },
+  "enumValue": {
+   "match": "^\\s*([A-Za-z_]\\w*)\\s*(=)\\s*(-?(?:0[xX][0-9A-Fa-f]+|[0-9]+))",
+   "captures": {
+    "1": {
+     "name": "variable.other.enummember.proto"
+    },
+    "2": {
+     "name": "keyword.operator.assignment.proto"
+    },
+    "3": {
+     "name": "constant.numeric.proto"
+    }
+   }
+  },
+  "reservedLike": {
+   "match": "\\b(reserved|extensions)\\b",
+   "name": "keyword.other.$1.proto"
+  },
+  "optionList": {
+   "begin": "\\[",
+   "end": "\\]",
+   "beginCaptures": {
+    "0": {
+     "name": "punctuation.section.brackets.begin.proto"
+    }
+   },
+   "endCaptures": {
+    "0": {
+     "name": "punctuation.section.brackets.end.proto"
+    }
+   },
+   "patterns": [
+    {
+     "include": "#comments"
+    },
+    {
+     "match": "((?:\\([.\\w]+\\)|[A-Za-z_]\\w*)(?:\\.(?:\\([.\\w]+\\)|[A-Za-z_]\\w*))*)\\s*(?==)",
+     "name": "entity.other.attribute-name.proto"
+    },
+    {
+     "include": "#textFormatKey"
+    },
+    {
+     "include": "#constants"
+    },
+    {
+     "include": "#strings"
+    },
+    {
+     "include": "#numbers"
+    },
+    {
+     "include": "#punctuation"
+    }
+   ]
+  },
+  "textFormatKey": {
+   "match": "(?:\\[[\\w./]+\\]|\\b[A-Za-z_]\\w*)\\s*(?=:)",
+   "name": "variable.other.property.proto"
+  },
+  "keywords": {
+   "patterns": [
+    {
+     "match": "\\b(to|max|stream|weak|public)\\b",
+     "name": "keyword.other.proto"
+    },
+    {
+     "match": "\\b(optional|required|repeated)\\b",
+     "name": "storage.modifier.proto"
+    },
+    {
+     "include": "#scalar"
+    }
+   ]
+  },
+  "scalar": {
+   "match": "\\b(double|float|int32|int64|uint32|uint64|sint32|sint64|fixed32|fixed64|sfixed32|sfixed64|bool|string|bytes)\\b",
+   "name": "storage.type.builtin.proto"
+  },
+  "constants": {
+   "match": "\\b(true|false|inf|nan)\\b",
+   "name": "constant.language.proto"
+  },
+  "strings": {
+   "patterns": [
+    {
+     "begin": "\"",
+     "end": "\"|$",
+     "name": "string.quoted.double.proto",
+     "patterns": [
+      {
+       "match": "\\\\(?:[abfnrtv\\\\'\"?]|[0-7]{1,3}|[xX][0-9A-Fa-f]{1,2}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})",
+       "name": "constant.character.escape.proto"
+      }
+     ]
+    },
+    {
+     "begin": "'",
+     "end": "'|$",
+     "name": "string.quoted.single.proto",
+     "patterns": [
+      {
+       "match": "\\\\(?:[abfnrtv\\\\'\"?]|[0-7]{1,3}|[xX][0-9A-Fa-f]{1,2}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})",
+       "name": "constant.character.escape.proto"
+      }
+     ]
+    }
+   ]
+  },
+  "numbers": {
+   "match": "(?<![\\w.])-?(?:0[xX][0-9A-Fa-f]+|[0-9]+(?:\\.[0-9]*)?(?:[eE][+-]?[0-9]+)?|\\.[0-9]+(?:[eE][+-]?[0-9]+)?)(?![\\w.])",
+   "name": "constant.numeric.proto"
+  },
+  "punctuation": {
+   "patterns": [
+    {
+     "match": ";",
+     "name": "punctuation.terminator.proto"
+    },
+    {
+     "match": ",",
+     "name": "punctuation.separator.comma.proto"
+    },
+    {
+     "match": "=",
+     "name": "keyword.operator.assignment.proto"
+    },
+    {
+     "match": "[{}]",
+     "name": "punctuation.section.block.proto"
+    }
+   ]
+  }
+ }
+}

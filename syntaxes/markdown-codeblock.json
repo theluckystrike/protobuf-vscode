@@ -1,0 +1,42 @@
+{
+ "fileTypes": [],
+ "injectionSelector": "L:text.html.markdown",
+ "scopeName": "markdown.protobuf.codeblock",
+ "patterns": [
+  {
+   "include": "#fence"
+  }
+ ],
+ "repository": {
+  "fence": {
+   "begin": "(^|\\G)(\\s*)(`{3,}|~{3,})\\s*(?i:(proto|protobuf|proto3|proto2)(\\s+[^`~]*)?$)",
+   "name": "markup.fenced_code.block.markdown",
+   "end": "(^|\\G)(\\2|\\s{0,3})(\\3)\\s*$",
+   "beginCaptures": {
+    "3": {
+     "name": "punctuation.definition.markdown"
+    },
+    "4": {
+     "name": "fenced_code.block.language.markdown"
+    }
+   },
+   "endCaptures": {
+    "3": {
+     "name": "punctuation.definition.markdown"
+    }
+   },
+   "patterns": [
+    {
+     "begin": "(^|\\G)(\\s*)(.*)",
+     "while": "(^|\\G)(?!\\s*([`~]{3,})\\s*$)",
+     "contentName": "meta.embedded.block.protobuf",
+     "patterns": [
+      {
+       "include": "source.proto"
+      }
+     ]
+    }
+   ]
+  }
+ }
+}

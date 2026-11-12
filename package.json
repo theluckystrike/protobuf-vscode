@@ -1,0 +1,286 @@
+{
+  "name": "zovo-protobuf",
+  "displayName": "Protobuf & Proto3 Formatter",
+  "description": "Protobuf and proto3 support for VS Code: syntax highlighting, a formatter that keeps every comment, go to definition, find references and diagnostics that match protoc. Proto2, proto3 and editions. Works offline, no protoc needed.",
+  "version": "0.1.0",
+  "publisher": "zovo",
+  "license": "MIT",
+  "icon": "icon.png",
+  "galleryBanner": {
+    "color": "#1B2A4A",
+    "theme": "dark"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/theluckystrike/protobuf-vscode"
+  },
+  "bugs": {
+    "url": "https://github.com/theluckystrike/protobuf-vscode/issues"
+  },
+  "homepage": "https://github.com/theluckystrike/protobuf-vscode#readme",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Formatters",
+    "Linters"
+  ],
+  "keywords": [
+    "protobuf",
+    "proto3",
+    "grpc",
+    "proto",
+    "formatter"
+  ],
+  "main": "./src/extension.js",
+  "activationEvents": [
+    "onLanguage:protobuf",
+    "workspaceContains:**/*.proto"
+  ],
+  "capabilities": {
+    "virtualWorkspaces": {
+      "supported": "limited",
+      "description": "Highlighting, formatting and the outline work in every editor. Imports across files need folders on disk."
+    },
+    "untrustedWorkspaces": {
+      "supported": true
+    }
+  },
+  "contributes": {
+    "languages": [
+      {
+        "id": "protobuf",
+        "aliases": [
+          "Protocol Buffers",
+          "Protobuf",
+          "proto"
+        ],
+        "extensions": [
+          ".proto"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "protobuf",
+        "scopeName": "source.proto",
+        "path": "./syntaxes/protobuf.tmLanguage.json"
+      },
+      {
+        "scopeName": "markdown.protobuf.codeblock",
+        "path": "./syntaxes/markdown-codeblock.json",
+        "injectTo": [
+          "text.html.markdown"
+        ],
+        "embeddedLanguages": {
+          "meta.embedded.block.protobuf": "protobuf"
+        }
+      }
+    ],
+    "snippets": [
+      {
+        "language": "protobuf",
+        "path": "./snippets/protobuf.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "zovoProto.rescan",
+        "title": "Rescan .proto Files",
+        "category": "Protobuf"
+      },
+      {
+        "command": "zovoProto.breaking",
+        "title": "Check Breaking Changes Against Git (Pro)",
+        "category": "Protobuf"
+      },
+      {
+        "command": "zovoProto.docs",
+        "title": "Generate API Docs (Pro)",
+        "category": "Protobuf"
+      },
+      {
+        "command": "zovoProto.decode",
+        "title": "Decode a Binary Message (Pro)",
+        "category": "Protobuf"
+      },
+      {
+        "command": "zovoProto.zovoPro.breaking",
+        "title": "Zovo Pro: Check breaking changes against git"
+      },
+      {
+        "command": "zovoProto.zovoPro.docs",
+        "title": "Zovo Pro: Generate API docs"
+      },
+      {
+        "command": "zovoProto.zovoPro.decode",
+        "title": "Zovo Pro: Decode with a .proto schema"
+      },
+      {
+        "command": "zovoProto.supportDeveloper",
+        "title": "Support the developer",
+        "category": "Protobuf"
+      },
+      {
+        "command": "zovoProto.moreViewers",
+        "title": "More free tools",
+        "category": "Protobuf"
+      },
+      {
+        "command": "zovoProto.getPro",
+        "title": "Get Zovo Pro (USD 19 once, all 22 Zovo extensions)",
+        "category": "Zovo Pro"
+      },
+      {
+        "command": "zovoProto.payWithPayPal",
+        "title": "Pay for Zovo Pro with PayPal (USD 19, team of 5 USD 59)",
+        "category": "Zovo Pro"
+      },
+      {
+        "command": "zovoProto.unlockWithSponsors",
+        "title": "I already paid: unlock with GitHub Sponsors",
+        "category": "Zovo Pro"
+      },
+      {
+        "command": "zovoProto.enterLicenseKey",
+        "title": "Enter Zovo Pro license key",
+        "category": "Zovo Pro"
+      },
+      {
+        "command": "zovoProto.removeLicense",
+        "title": "Remove Zovo Pro from this editor",
+        "category": "Zovo Pro"
+      },
+      {
+        "command": "zovoProto.payByCard",
+        "title": "Pay for Zovo Pro by card (USD 19)",
+        "category": "Zovo Pro"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "zovoProto.breaking",
+          "when": "editorLangId == protobuf && config.zovoProto.showProTools",
+          "group": "zovoPro@1"
+        },
+        {
+          "command": "zovoProto.docs",
+          "when": "editorLangId == protobuf && config.zovoProto.showProTools",
+          "group": "zovoPro@2"
+        },
+        {
+          "command": "zovoProto.decode",
+          "when": "editorLangId == protobuf && config.zovoProto.showProTools",
+          "group": "zovoPro@3"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "zovoProto.zovoPro.breaking",
+          "when": "(explorerResourceIsFolder || resourceExtname == .proto) && config.zovoProto.showProTools",
+          "group": "zovoPro@1"
+        },
+        {
+          "command": "zovoProto.zovoPro.docs",
+          "when": "(explorerResourceIsFolder || resourceExtname == .proto) && config.zovoProto.showProTools",
+          "group": "zovoPro@2"
+        },
+        {
+          "command": "zovoProto.zovoPro.decode",
+          "when": "!explorerResourceIsFolder && resourceExtname =~ /^\\.(bin|pb|binpb|protobuf|msg|dat)$/i && config.zovoProto.showProTools",
+          "group": "zovoPro@3"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "zovoProto.zovoPro.breaking",
+          "when": "false"
+        },
+        {
+          "command": "zovoProto.zovoPro.docs",
+          "when": "false"
+        },
+        {
+          "command": "zovoProto.zovoPro.decode",
+          "when": "false"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Protobuf & Proto3 Formatter",
+      "properties": {
+        "zovoProto.importPaths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "markdownDescription": "Extra folders to search for imports, like `protoc -I`. A relative path starts at the workspace folder. The workspace folder and the folders above each file are always searched, and `google/protobuf/*.proto` is built in."
+        },
+        "zovoProto.diagnostics": {
+          "type": "boolean",
+          "default": true,
+          "description": "Check open .proto files for the errors protoc reports (duplicate field numbers, unknown types, reserved numbers, proto3 and editions rules)."
+        },
+        "zovoProto.unusedImports": {
+          "type": "boolean",
+          "default": true,
+          "description": "Fade imports that nothing in the file uses (protoc prints a warning for them)."
+        },
+        "zovoProto.maxFiles": {
+          "type": "number",
+          "default": 5000,
+          "minimum": 100,
+          "description": "Index at most this many .proto files of the workspace for go to definition and find references."
+        },
+        "zovoProto.exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "**/node_modules/**",
+            "**/bazel-*/**",
+            "**/.git/**"
+          ],
+          "description": "Glob patterns of folders not to index."
+        },
+        "zovoProto.baseBranch": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Branch or commit for \"Check Breaking Changes Against Git\" (Pro). Empty: origin/main, main, origin/master or master, the first that exists. The check compares with the merge base."
+        },
+        "zovoProto.showProTools": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the Zovo Pro tools in the editor and Explorer right-click menus. Everything free stays visible."
+        },
+        "zovoProto.askForRating": {
+          "type": "boolean",
+          "default": true,
+          "description": "Ask once for a Marketplace rating after the extension has been useful on two occasions at least 30 minutes apart. Never on startup, never after an error. Nothing is sent anywhere."
+        },
+        "zovoProto.showSupportLinks": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show More free tools and Support the developer in the command palette."
+        }
+      }
+    },
+    "configurationDefaults": {
+      "[protobuf]": {
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true
+      }
+    }
+  },
+  "scripts": {
+    "test": "node scripts/test.js"
+  },
+  "sponsor": {
+    "url": "https://github.com/sponsors/theluckystrike/sponsorships?tier_id=679878"
+  }
+}

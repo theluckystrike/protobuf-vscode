@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package shop.v1;
+
+import "common/money.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "example.com/shop/v1;shopv1";
+
+// Orders placed in the web shop.
+service OrderService {
+  // Returns one order.
+  rpc GetOrder(GetOrderRequest) returns (Order);
+  // Streams new orders as they arrive.
+  rpc WatchOrders(WatchOrdersRequest) returns (stream Order);
+}
+
+message GetOrderRequest {
+  string id = 1;
+}
+
+message WatchOrdersRequest {
+  Status status = 1;
+}
+
+// One order and its lines.
+message Order {
+  string id = 1;
+  Status status = 2;
+  repeated Line lines = 3;
+  map<string, string> labels = 4;
+  google.protobuf.Timestamp created = 5;
+  shop.common.Money total = 6;
+  oneof delivery {
+    string pickup_store = 7;
+    Address address = 8;
+  }
+  repeated int32 coupon_ids = 9;
+  sint64 balance = 10;
+  bytes signature = 11;
+
+  message Line {
+    string sku = 1;
+    uint32 qty = 2;
+    shop.common.Money price = 3;
+  }
+}
+
+message Address {
+  string street = 1;
+  string city = 2;
+}
+
+enum Status {
+  STATUS_UNSPECIFIED = 0;
+  STATUS_PAID = 1;
+  STATUS_SHIPPED = 2;
+}

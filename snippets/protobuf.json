@@ -1,0 +1,82 @@
+{
+  "proto3 file": {
+    "prefix": "proto3",
+    "body": [
+      "syntax = \"proto3\";",
+      "",
+      "package ${1:example.v1};",
+      "",
+      "$0"
+    ],
+    "description": "A proto3 file header"
+  },
+  "edition file": {
+    "prefix": "edition",
+    "body": [
+      "edition = \"${1:2023}\";",
+      "",
+      "package ${2:example.v1};",
+      "",
+      "$0"
+    ],
+    "description": "An editions file header"
+  },
+  "message": {
+    "prefix": "message",
+    "body": [
+      "message ${1:Name} {",
+      "  ${2:string} ${3:id} = ${4:1};$0",
+      "}"
+    ],
+    "description": "A message"
+  },
+  "enum": {
+    "prefix": "enum",
+    "body": [
+      "enum ${1:Name} {",
+      "  ${2:${1/(.*)/${1:/upcase}/}}_UNSPECIFIED = 0;$0",
+      "}"
+    ],
+    "description": "An enum with its zero value"
+  },
+  "service": {
+    "prefix": "service",
+    "body": [
+      "service ${1:Name}Service {",
+      "  rpc ${2:Get}(${3:${2}Request}) returns (${4:${2}Response});$0",
+      "}"
+    ],
+    "description": "A gRPC service"
+  },
+  "rpc": {
+    "prefix": "rpc",
+    "body": [
+      "rpc ${1:Method}(${2:${1}Request}) returns (${3:${1}Response});"
+    ],
+    "description": "A method"
+  },
+  "oneof": {
+    "prefix": "oneof",
+    "body": [
+      "oneof ${1:kind} {",
+      "  ${2:string} ${3:name} = ${4:1};$0",
+      "}"
+    ],
+    "description": "A oneof"
+  },
+  "map": {
+    "prefix": "map",
+    "body": [
+      "map<${1:string}, ${2:string}> ${3:labels} = ${4:1};"
+    ],
+    "description": "A map field"
+  },
+  "reserved": {
+    "prefix": "reserved",
+    "body": [
+      "reserved ${1:2};",
+      "reserved \"${2:old_name}\";"
+    ],
+    "description": "Reserve a removed field number and name"
+  }
+}
